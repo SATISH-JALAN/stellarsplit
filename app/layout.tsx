@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Space_Grotesk, DM_Mono } from "next/font/google";
+import { WalletProvider } from "@/context/WalletContext";
 import "./globals.css";
 
 const spaceGrotesk = Space_Grotesk({
@@ -29,9 +30,11 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${spaceGrotesk.variable} ${dmMono.variable}`}
-      style={{ backgroundColor: "#0A0F1E" }}
+      style={{ backgroundColor: "#1C1917" }}
     >
-      <body>{children}</body>
+      <body>
+        <WalletProvider>{children}</WalletProvider>
+      </body>
     </html>
   );
 }

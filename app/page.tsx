@@ -4,52 +4,68 @@ import { SplitLine } from "@/components/SplitLine";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 
-const features = [
+const steps = [
   {
-    icon: "👛",
-    title: "Connect Your Wallet",
+    num: "01",
+    title: "Connect your wallet",
     description:
-      "Use Freighter or any Stellar wallet. No signup required.",
+      "Freighter or any supported Stellar wallet. No account, no email. Your keys stay with you.",
   },
   {
-    icon: "🧾",
-    title: "Create a Bill",
+    num: "02",
+    title: "Create a bill",
     description:
-      "Add participants and amounts. The contract handles the math.",
+      "Name the expense, assign shares. The contract records exact amounts — no rounding disputes.",
   },
   {
-    icon: "⚡",
-    title: "Settle Instantly",
+    num: "03",
+    title: "Funds release automatically",
     description:
-      "Each person pays their share. Funds release automatically.",
+      "Each person pays their share directly on-chain. When the last payment confirms, the contract sends everything to the creator.",
   },
 ];
 
 export default function Home() {
   return (
-    <main className="min-h-screen" style={{ backgroundColor: "#0A0F1E" }}>
+    <main style={{ backgroundColor: "#1C1917", minHeight: "100vh" }}>
       <Navbar />
-
       <HeroSection />
 
-      <SplitLine className="max-w-6xl mx-auto px-6 my-4" />
+      {/* How it works — editorial list, not card grid */}
+      <section className="max-w-7xl mx-auto px-6 pb-24">
+        <SplitLine />
 
-      {/* Features section */}
-      <section className="max-w-6xl mx-auto px-6 py-16">
-        <h2
-          className="text-3xl font-bold text-center mb-12"
-          style={{
-            fontFamily: "var(--font-display), sans-serif",
-            color: "#F0F4FF",
-          }}
-        >
-          How it works
-        </h2>
+        {/* Section header */}
+        <div className="flex items-baseline justify-between py-6">
+          <h2
+            className="font-semibold"
+            style={{
+              fontFamily: "var(--font-display)",
+              fontSize: "1rem",
+              color: "#F5F0EB",
+            }}
+          >
+            How it works
+          </h2>
+          <span
+            className="text-xs"
+            style={{
+              fontFamily: "var(--font-mono)",
+              color: "#5C5450",
+              letterSpacing: "0.08em",
+            }}
+          >
+            3 STEPS
+          </span>
+        </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {features.map((feature) => (
-            <FeatureCard key={feature.title} {...feature} />
+        {/* Steps as rows */}
+        <div>
+          {steps.map((s) => (
+            <FeatureCard key={s.num} {...s} />
           ))}
+          {/* Closing rule */}
+          <SplitLine />
         </div>
       </section>
 

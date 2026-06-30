@@ -1,42 +1,53 @@
-interface FeatureCardProps {
-    icon: string;
+/**
+ * StepRow — replaces the 3-card grid.
+ * An editorial list row: number, title, description in a horizontal band.
+ * Separated by hairline rules, not boxed in rounded cards.
+ */
+interface StepRowProps {
+    num: string;
     title: string;
     description: string;
 }
 
-export function FeatureCard({ icon, title, description }: FeatureCardProps) {
+export function FeatureCard({ num, title, description }: StepRowProps) {
     return (
         <div
-            className="flex flex-col gap-4 p-6 rounded-2xl transition-all duration-200 hover:scale-[1.02]"
+            className="grid gap-4 py-8"
             style={{
-                backgroundColor: "#1E2A45",
-                border: "1px solid #2A3A5C",
+                gridTemplateColumns: "3rem 1fr 2fr",
+                borderTop: "1px solid #38322D",
             }}
         >
-            {/* Icon circle */}
-            <div
-                className="w-12 h-12 flex items-center justify-center rounded-xl text-2xl shrink-0"
+            {/* Step number */}
+            <span
+                className="font-medium pt-0.5"
                 style={{
-                    backgroundColor: "#00D4FF18",
-                    border: "1px solid #00D4FF33",
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.8rem",
+                    color: "#F46F73",
+                    letterSpacing: "0.05em",
                 }}
             >
-                {icon}
-            </div>
+                {num}
+            </span>
 
             {/* Title */}
             <h3
-                className="text-base font-semibold"
+                className="font-semibold leading-snug"
                 style={{
-                    fontFamily: "var(--font-display), sans-serif",
-                    color: "#F0F4FF",
+                    fontFamily: "var(--font-display)",
+                    fontSize: "0.95rem",
+                    color: "#F5F0EB",
                 }}
             >
                 {title}
             </h3>
 
             {/* Description */}
-            <p className="text-sm leading-relaxed" style={{ color: "#8B9CC8" }}>
+            <p
+                className="text-sm leading-relaxed"
+                style={{ color: "#8C837C" }}
+            >
                 {description}
             </p>
         </div>

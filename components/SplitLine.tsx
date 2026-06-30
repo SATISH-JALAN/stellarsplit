@@ -1,14 +1,17 @@
+/**
+ * SplitLine — a full-bleed horizontal rule.
+ * No gradient fade, no glyph. Just a clean warm line.
+ * Used as structural punctuation between sections.
+ */
 export function SplitLine({ className }: { className?: string }) {
     return (
-        <div className={`relative flex items-center ${className ?? ""}`}>
-            <div
-                className="flex-1 h-px opacity-60"
-                style={{
-                    background:
-                        "linear-gradient(to right, transparent, #00D4FF, transparent)",
-                    boxShadow: "0 0 8px #00D4FF66",
-                }}
-            />
-        </div>
+        <hr
+            className={className}
+            style={{
+                border: "none",
+                borderTop: "1px solid #38322D",
+                margin: 0,
+            }}
+        />
     );
 }

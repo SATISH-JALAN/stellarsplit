@@ -1,124 +1,151 @@
 "use client";
 
-import { SplitLine } from "./SplitLine";
-
-const stats = [
-    { value: "3 sec", label: "Settlement" },
-    { value: "$0.001", label: "Per Transaction" },
-    { value: "100%", label: "Trustless" },
-];
-
 export function HeroSection() {
     return (
         <section
-            className="relative flex flex-col items-center justify-center min-h-screen text-center px-6"
-            style={{ paddingTop: "64px" }}
+            className="relative min-h-screen max-w-7xl mx-auto px-6 flex flex-col justify-end pb-16 md:pb-20"
+            style={{ paddingTop: "56px" }}
         >
-            {/* Background glow effect */}
+            {/* Faint watermark — texture without gradient blob */}
             <div
-                className="absolute inset-0 pointer-events-none"
-                style={{
-                    background:
-                        "radial-gradient(ellipse 60% 40% at 50% 40%, #00D4FF0A 0%, transparent 70%)",
-                }}
-            />
-
-            <div className="relative z-10 flex flex-col items-center gap-6 max-w-4xl">
-                {/* Eyebrow */}
-                <p
-                    className="text-xs font-semibold tracking-widest uppercase"
-                    style={{ color: "#00D4FF", letterSpacing: "0.2em" }}
-                >
-                    Built on Stellar Testnet
-                </p>
-
-                {/* H1 */}
-                <h1
-                    className="font-bold leading-none"
+                aria-hidden="true"
+                className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden"
+                style={{ paddingTop: "56px" }}
+            >
+                <span
+                    className="font-bold select-none"
                     style={{
-                        fontFamily: "var(--font-display), sans-serif",
-                        color: "#F0F4FF",
+                        fontFamily: "var(--font-display)",
+                        fontSize: "clamp(10rem, 32vw, 28rem)",
+                        color: "rgba(244, 111, 115, 0.04)",
+                        lineHeight: 1,
+                        letterSpacing: "-0.04em",
+                        userSelect: "none",
                     }}
                 >
-                    <span
-                        className="block"
-                        style={{ fontSize: "clamp(3rem, 10vw, 6rem)" }}
+                    SPLIT
+                </span>
+            </div>
+
+            {/* Content — left aligned, bottom of screen */}
+            <div className="relative z-10 flex flex-col md:flex-row md:items-end md:justify-between gap-10">
+
+                {/* Left: headline block */}
+                <div className="flex flex-col gap-5 max-w-2xl">
+
+                    {/* Label */}
+                    <p
+                        className="text-xs font-medium"
+                        style={{
+                            fontFamily: "var(--font-mono)",
+                            color: "#5C5450",
+                            letterSpacing: "0.1em",
+                        }}
                     >
-                        Split Bills.
-                    </span>
-                    <span
-                        className="block"
-                        style={{ fontSize: "clamp(3rem, 10vw, 6rem)" }}
+                        STELLAR · SOROBAN · TESTNET
+                    </p>
+
+                    {/* H1 — ragged right, not centered */}
+                    <h1
+                        className="font-bold leading-[1.0] tracking-tight"
+                        style={{
+                            fontFamily: "var(--font-display)",
+                            fontSize: "clamp(3rem, 8.5vw, 6rem)",
+                            color: "#F5F0EB",
+                        }}
                     >
-                        Settle{" "}
-                        <span
-                            className="glow-text"
-                            style={{ color: "#00D4FF" }}
+                        Split the bill.<br />
+                        <span style={{ color: "#F46F73" }}>No one gets</span><br />
+                        <span style={{ color: "#F46F73" }}>left behind.</span>
+                    </h1>
+
+                    {/* Body */}
+                    <p
+                        className="text-base leading-relaxed max-w-md"
+                        style={{ color: "#8C837C" }}
+                    >
+                        Group payments held in a Soroban smart contract.
+                        Funds release the moment the last person pays — no
+                        chasing, no trust required.
+                    </p>
+
+                    {/* Actions — left aligned, no centered stack */}
+                    <div className="flex flex-wrap gap-3 pt-1">
+                        <button
+                            className="text-sm font-semibold px-6 py-3 transition-colors duration-150"
+                            style={{
+                                backgroundColor: "#F46F73",
+                                color: "#1C1917",
+                                borderRadius: "4px",
+                            }}
+                            onMouseEnter={(e) => {
+                                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E35C63";
+                            }}
+                            onMouseLeave={(e) => {
+                                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F46F73";
+                            }}
                         >
-                            Instantly.
-                        </span>
-                    </span>
-                </h1>
+                            Create a bill
+                        </button>
 
-                {/* Subheading */}
-                <p
-                    className="text-lg max-w-xl leading-relaxed"
-                    style={{ color: "#8B9CC8" }}
+                        <button
+                            className="text-sm font-medium px-6 py-3 transition-colors duration-150"
+                            style={{
+                                backgroundColor: "transparent",
+                                color: "#8C837C",
+                                border: "1px solid #38322D",
+                                borderRadius: "4px",
+                            }}
+                            onMouseEnter={(e) => {
+                                const el = e.currentTarget as HTMLButtonElement;
+                                el.style.borderColor = "#5C5450";
+                                el.style.color = "#F5F0EB";
+                            }}
+                            onMouseLeave={(e) => {
+                                const el = e.currentTarget as HTMLButtonElement;
+                                el.style.borderColor = "#38322D";
+                                el.style.color = "#8C837C";
+                            }}
+                        >
+                            How it works
+                        </button>
+                    </div>
+                </div>
+
+                {/* Right: stats column — vertical list, not cards */}
+                <div
+                    className="flex flex-row md:flex-col gap-8 md:gap-0 md:divide-y pb-1"
+                    style={{ borderColor: "#38322D" }}
                 >
-                    Trustless group payments powered by Soroban smart contracts. No
-                    middlemen, no waiting, no drama.
-                </p>
-
-                {/* CTA Buttons */}
-                <div className="flex flex-col sm:flex-row gap-4 mt-2">
-                    <button
-                        className="text-base font-semibold px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105 cursor-pointer"
-                        style={{
-                            backgroundColor: "#00D4FF",
-                            color: "#0A0F1E",
-                        }}
-                        onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                                "0 0 30px #00D4FF55";
-                        }}
-                        onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
-                        }}
-                    >
-                        Create a Bill
-                    </button>
-                    <button
-                        className="text-base font-semibold px-8 py-4 rounded-xl transition-all duration-200 hover:scale-105 cursor-pointer"
-                        style={{
-                            backgroundColor: "transparent",
-                            border: "1.5px solid #00D4FF",
-                            color: "#00D4FF",
-                        }}
-                    >
-                        View Demo
-                    </button>
-                </div>
-
-                {/* Split line */}
-                <div className="w-full max-w-md mt-4">
-                    <SplitLine />
-                </div>
-
-                {/* Stats row */}
-                <div className="flex gap-10 sm:gap-16 mt-2">
-                    {stats.map((stat) => (
-                        <div key={stat.label} className="flex flex-col items-center gap-1">
+                    {[
+                        { value: "3s", label: "Settlement time" },
+                        { value: "~$0", label: "Transaction fees" },
+                        { value: "Non-custodial", label: "No third party holds funds" },
+                    ].map((s, i) => (
+                        <div
+                            key={s.label}
+                            className="flex flex-col gap-0.5 md:py-5"
+                            style={i === 0 ? { paddingTop: 0 } : {}}
+                        >
                             <span
-                                className="text-2xl font-bold"
+                                className="font-bold tracking-tight"
                                 style={{
-                                    fontFamily: "var(--font-display), sans-serif",
-                                    color: "#00D4FF",
+                                    fontFamily: "var(--font-display)",
+                                    fontSize: "1.25rem",
+                                    color: "#F5F0EB",
                                 }}
                             >
-                                {stat.value}
+                                {s.value}
                             </span>
-                            <span className="text-xs uppercase tracking-wider" style={{ color: "#8B9CC8" }}>
-                                {stat.label}
+                            <span
+                                className="text-xs"
+                                style={{
+                                    fontFamily: "var(--font-mono)",
+                                    color: "#5C5450",
+                                    letterSpacing: "0.06em",
+                                }}
+                            >
+                                {s.label}
                             </span>
                         </div>
                     ))}

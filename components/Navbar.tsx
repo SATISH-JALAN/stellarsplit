@@ -3,54 +3,55 @@
 export function Navbar() {
     return (
         <nav
-            className="fixed top-0 left-0 right-0 z-50 h-16 flex items-center"
+            className="fixed top-0 left-0 right-0 z-50 h-14"
             style={{
+                backgroundColor: "rgba(28, 25, 23, 0.96)",
                 backdropFilter: "blur(12px)",
-                WebkitBackdropFilter: "blur(12px)",
-                backgroundColor: "rgba(10, 15, 30, 0.85)",
-                borderBottom: "1px solid #2A3A5C",
+                borderBottom: "1px solid #38322D",
             }}
         >
-            <div className="max-w-6xl mx-auto px-6 w-full flex items-center justify-between">
-                {/* Brand */}
-                <span
-                    className="text-xl font-bold tracking-tight select-none"
-                    style={{ fontFamily: "var(--font-display), sans-serif" }}
+            <div
+                className="h-full max-w-7xl mx-auto px-6 flex items-center justify-between"
+            >
+                {/* Brand — just text, no icons */}
+                <a
+                    href="/"
+                    className="text-sm font-semibold tracking-tight"
+                    style={{ fontFamily: "var(--font-display)", color: "#F5F0EB" }}
                 >
-                    <span style={{ color: "#00D4FF" }}>✦</span>{" "}
-                    <span style={{ color: "#F0F4FF" }}>StellarSplit</span>
-                </span>
+                    Stellar<span style={{ color: "#F46F73" }}>Split</span>
+                </a>
 
-                {/* Right side */}
-                <div className="flex items-center gap-3">
-                    {/* Testnet badge */}
+                <div className="flex items-center gap-4">
+                    {/* Network indicator — monospace, understated */}
                     <span
-                        className="text-xs font-medium px-2.5 py-1 rounded-full"
+                        className="text-xs"
                         style={{
-                            border: "1px solid #00D4FF",
-                            color: "#00D4FF",
-                            letterSpacing: "0.05em",
+                            fontFamily: "var(--font-mono)",
+                            color: "#5C5450",
+                            letterSpacing: "0.04em",
                         }}
                     >
-                        Testnet
+                        testnet
                     </span>
 
-                    {/* Connect Wallet button */}
                     <button
-                        className="text-sm font-semibold px-4 py-2 rounded-lg transition-all duration-200 hover:scale-105 cursor-pointer"
+                        className="text-xs font-medium px-3.5 py-2 transition-colors duration-150"
                         style={{
-                            backgroundColor: "#00D4FF",
-                            color: "#0A0F1E",
+                            fontFamily: "var(--font-mono)",
+                            backgroundColor: "#F46F73",
+                            color: "#1C1917",
+                            borderRadius: "4px",
+                            letterSpacing: "0.03em",
                         }}
                         onMouseEnter={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.boxShadow =
-                                "0 0 20px #00D4FF44";
+                            (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E35C63";
                         }}
                         onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.boxShadow = "none";
+                            (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F46F73";
                         }}
                     >
-                        Connect Wallet
+                        connect wallet
                     </button>
                 </div>
             </div>

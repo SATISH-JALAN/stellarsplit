@@ -11,8 +11,8 @@ export function WalletPanel() {
 
     return (
         <div
-            className="flex flex-col gap-0 md:min-w-[200px]"
-            style={{ borderLeft: "1px solid #38322D", paddingLeft: "1.5rem" }}
+            className="flex flex-col gap-0 md:min-w-[200px] border-t md:border-t-0 md:border-l pt-6 md:pt-0 md:pl-6"
+            style={{ borderColor: "#38322D" }}
         >
             {/* Address row */}
             <div className="flex flex-col gap-0.5 pb-5" style={{ borderBottom: "1px solid #38322D" }}>

@@ -123,7 +123,7 @@ export function HeroSection() {
                     <WalletPanel />
                 ) : (
                     <div
-                        className="flex flex-row md:flex-col gap-8 md:gap-0 md:divide-y pb-1"
+                        className="flex flex-col sm:flex-row md:flex-col gap-6 sm:gap-8 md:gap-0 md:divide-y pb-1 border-t md:border-t-0 md:border-l pt-6 md:pt-0 md:pl-6"
                         style={{ borderColor: "#38322D" }}
                     >
                         {[

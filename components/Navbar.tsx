@@ -28,7 +28,7 @@ export function Navbar() {
                 <div className="flex items-center gap-4">
                     {/* Network indicator */}
                     <span
-                        className="text-xs"
+                        className="hidden sm:inline text-xs"
                         style={{ fontFamily: "var(--font-mono)", color: "#5C5450", letterSpacing: "0.04em" }}
                     >
                         testnet

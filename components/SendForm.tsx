@@ -126,6 +126,7 @@ export function SendForm() {
                 padding: "1.5rem",
                 width: "100%",
                 maxWidth: "480px",
+                margin: "0 auto",
             }}
         >
             {/* Panel header */}

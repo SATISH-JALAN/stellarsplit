@@ -7,27 +7,28 @@ import {
   Asset,
   Memo,
 } from "@stellar/stellar-sdk";
-import { signTransaction } from "@stellar/freighter-api";
+import { signTransactionWithKit } from "./wallet";
 import { HORIZON_URL } from "./constants";
 
 const server = new Horizon.Server(HORIZON_URL);
 
 export interface AccountBalance {
-  xlm: string;    // formatted, e.g. "125.4200000"
-  xlmRaw: string; // raw string from API
+  xlm: string;
+  xlmRaw: string;
 }
 
-export async function fetchAccountBalance(publicKey: string): Promise<AccountBalance> {
+export async function fetchAccountBalance(
+  publicKey: string
+): Promise<AccountBalance> {
   const account = await server.loadAccount(publicKey);
-  const nativeBalance = account.balances.find(b => b.asset_type === "native");
+  const nativeBalance = account.balances.find(
+    (b) => b.asset_type === "native"
+  );
   const balance = (nativeBalance as any)?.balance ?? null;
   if (!balance) {
     throw new Error("No XLM balance found for this account");
   }
-  return {
-    xlm: balance,
-    xlmRaw: balance,
-  };
+  return { xlm: balance, xlmRaw: balance };
 }
 
 export function formatXLM(raw: string): string {
@@ -51,10 +52,8 @@ export async function sendXLM(
   amount: string,
   memo?: string
 ): Promise<SendResult> {
-  // Load sender account for sequence number
   const senderAccount = await server.loadAccount(senderPublicKey);
 
-  // Build transaction
   const transaction = new TransactionBuilder(senderAccount, {
     fee: BASE_FEE,
     networkPassphrase: Networks.TESTNET,
@@ -70,21 +69,9 @@ export async function sendXLM(
     .setTimeout(30)
     .build();
 
-  // Sign with Freighter
   const xdrString = transaction.toXDR();
-  const signResult = await signTransaction(xdrString, {
-    networkPassphrase: Networks.TESTNET,
-  });
-
-  if (signResult.error) {
-    throw new Error(String(signResult.error));
-  }
-
-  // Reconstruct and submit the signed transaction
-  const signedTx = TransactionBuilder.fromXDR(
-    signResult.signedTxXdr,
-    Networks.TESTNET
-  );
+  const signedXdr = await signTransactionWithKit(xdrString, Networks.TESTNET);
+  const signedTx = TransactionBuilder.fromXDR(signedXdr, Networks.TESTNET);
   const response = await server.submitTransaction(signedTx);
 
   return {

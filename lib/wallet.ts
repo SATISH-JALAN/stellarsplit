@@ -1,38 +1,72 @@
 import {
-  isConnected,
-  getAddress,
-  isAllowed,
-  setAllowed,
-} from "@stellar/freighter-api";
+  StellarWalletsKit,
+  Networks,
+  type ISupportedWallet,
+} from "@creit.tech/stellar-wallets-kit";
+import {
+  FreighterModule,
+  FREIGHTER_ID,
+} from "@creit.tech/stellar-wallets-kit/modules/freighter";
+import {
+  xBullModule,
+  XBULL_ID,
+} from "@creit.tech/stellar-wallets-kit/modules/xbull";
+import {
+  LobstrModule,
+  LOBSTR_ID,
+} from "@creit.tech/stellar-wallets-kit/modules/lobstr";
 
-export async function isFreighterInstalled(): Promise<boolean> {
-  const result = await isConnected();
-  return result.isConnected;
+export { FREIGHTER_ID, XBULL_ID, LOBSTR_ID };
+export type { ISupportedWallet };
+
+let initialized = false;
+
+export function initKit(): void {
+  if (initialized) return;
+  StellarWalletsKit.init({
+    network: Networks.TESTNET,
+    selectedWalletId: FREIGHTER_ID,
+    modules: [
+      new FreighterModule(),
+      new xBullModule(),
+      new LobstrModule(),
+    ],
+  });
+  initialized = true;
 }
 
-export async function connectFreighter(): Promise<string> {
-  // Request access if not already allowed
-  const allowed = await isAllowed();
-  if (!allowed.isAllowed) {
-    await setAllowed();
-  }
-  const result = await getAddress();
-  if (result.error) throw new Error(String(result.error));
-  return result.address;
+export async function getSupportedWallets(): Promise<ISupportedWallet[]> {
+  initKit();
+  return StellarWalletsKit.refreshSupportedWallets();
 }
 
-export async function getFreighterPublicKey(): Promise<string | null> {
-  try {
-    const connected = await isConnected();
-    if (!connected.isConnected) return null;
-    const allowed = await isAllowed();
-    if (!allowed.isAllowed) return null;
-    const result = await getAddress();
-    if (result.error) return null;
-    return result.address;
-  } catch {
-    return null;
-  }
+export function selectWallet(id: string): void {
+  initKit();
+  StellarWalletsKit.setWallet(id);
+}
+
+export async function getPublicKeyFromKit(): Promise<string> {
+  initKit();
+  // fetchAddress() talks directly to the extension (triggers permission popup if needed)
+  // getAddress() only reads from kit memory — empty on first connect
+  const { address } = await StellarWalletsKit.fetchAddress();
+  return address;
+}
+
+export async function signTransactionWithKit(
+  xdr: string,
+  networkPassphrase: string
+): Promise<string> {
+  initKit();
+  const { signedTxXdr } = await StellarWalletsKit.signTransaction(xdr, {
+    networkPassphrase,
+  });
+  return signedTxXdr;
+}
+
+export async function disconnectKit(): Promise<void> {
+  if (!initialized) return;
+  await StellarWalletsKit.disconnect();
 }
 
 export function truncateAddress(address: string): string {

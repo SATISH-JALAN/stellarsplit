@@ -1,36 +1,78 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# StellarSplit 🪐
 
-## Getting Started
+[![StellarSplit CI](https://github.com/SATISH-JALAN/stellarsplit/actions/workflows/ci.yml/badge.svg)](https://github.com/SATISH-JALAN/stellarsplit/actions/workflows/ci.yml)
 
-First, run the development server:
+StellarSplit is a non-custodial decentralized application (dApp) built on **Stellar** and **Soroban smart contracts** that solves the problem of group payments. It securely holds funds in an on-chain escrow, and automatically releases them the moment the last person in the group pays their share. No chasing, no trust required.
 
+## 🚀 Live Demo & Links
+
+- **Live Demo**: [Insert Vercel/Netlify Link Here]
+- **Public GitHub Repository**: [https://github.com/SATISH-JALAN/stellarsplit](https://github.com/SATISH-JALAN/stellarsplit)
+
+## 🛠 Features
+
+- **Smart Contract Escrow**: Funds are securely locked in a Soroban Treasury contract.
+- **Auto-Release**: The exact moment a group bill is fully funded, the Treasury automatically disperses the funds to the payee.
+- **Freighter Wallet Integration**: Connect and sign transactions seamlessly using the Stellar Freighter extension.
+- **Mobile Responsive UI**: Built with Next.js and Tailwind CSS, fully responsive across desktop, tablet, and mobile devices.
+- **CI/CD Pipeline**: Automated Rust tests run on every push and pull request via GitHub Actions.
+
+## 📸 Showcase
+
+### 1. Mobile Responsive UI
+> **Note for submission:** Add your mobile UI screenshot in the `screenshots` folder as `mobile-ui.png`.
+![Mobile Responsive UI](./screenshots/mobile-ui.png)
+
+### 2. CI/CD Pipeline Running
+> **Note for submission:** Add your GitHub Actions passing screenshot in the `screenshots` folder as `ci-cd.png`.
+![CI/CD Pipeline Running](./screenshots/ci-cd.png)
+
+### 3. Test Output (3+ Passing Tests)
+> **Note for submission:** Add your terminal screenshot of the passing tests in the `screenshots` folder as `tests.png`.
+![Test Output](./screenshots/tests.png)
+
+## 🔗 Stellar Testnet Contracts
+
+StellarSplit relies on two inter-linked Soroban contracts deployed on the Stellar Testnet:
+
+1. **GroupBill (Orchestrator)**: Manages bill creation and handles cross-contract invocations.
+   - **Contract ID**: `CC53VWUG5ZPLAOCPUGZZLE7LQKQA6WAE25DMEDXK57WAUC3UQYNKZOAW`
+2. **Treasury (Escrow)**: Holds the funds securely and releases them upon condition fulfillment.
+   - **Contract ID**: `CAFEB2PJHL2DMHZG6AN2M4GN5HTHZGPGTEP3U6P3DDTPCKXSJRD7VOTZ`
+
+### Example Transaction Hash
+- **Contract Interaction (Initialization/Deployment)**: `b9e6af809d93eeaa6116288fe01370b14c4b07535afe6fd83ce5c18e1bc3bfd1`
+
+## 💻 Tech Stack
+
+- **Frontend**: Next.js 14, React, Tailwind CSS
+- **Wallet**: `@stellar/freighter-api`
+- **Blockchain**: Stellar Testnet, Soroban SDK (`v23`)
+- **Languages**: TypeScript (Frontend), Rust (Smart Contracts)
+- **CI/CD**: GitHub Actions
+
+## 🏗 Local Development
+
+### Prerequisites
+- Node.js (`v18` or higher)
+- Rust and Cargo (`wasm32-unknown-unknown` target installed)
+- Stellar CLI installed
+
+### Running the Frontend
 ```bash
+# 1. Install dependencies
+npm install
+
+# 2. Run the development server
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+```
+Open `http://localhost:3000` to view the dApp.
+
+### Running the Smart Contract Tests
+```bash
+cd contracts/group_bill
+cargo test
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 📝 License
+MIT License

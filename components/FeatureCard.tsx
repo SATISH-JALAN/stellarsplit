@@ -15,7 +15,7 @@ export function FeatureCard({ icon, title, description }: FeatureCardProps) {
         >
             {/* Icon circle */}
             <div
-                className="w-12 h-12 flex items-center justify-center rounded-xl text-2xl flex-shrink-0"
+                className="w-12 h-12 flex items-center justify-center rounded-xl text-2xl shrink-0"
                 style={{
                     backgroundColor: "#00D4FF18",
                     border: "1px solid #00D4FF33",

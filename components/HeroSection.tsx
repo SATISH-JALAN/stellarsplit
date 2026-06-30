@@ -1,3 +1,5 @@
+"use client";
+
 import { SplitLine } from "./SplitLine";
 
 const stats = [

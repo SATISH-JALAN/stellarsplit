@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useWallet } from "@/context/WalletContext";
 import { WalletPanel } from "@/components/WalletPanel";
 
@@ -75,22 +76,23 @@ export function HeroSection() {
 
                     {/* Actions — left aligned, no centered stack */}
                     <div className="flex flex-wrap gap-3 pt-1">
-                        <button
-                            className="text-sm font-semibold px-6 py-3 transition-colors duration-150"
+                        <Link
+                            href="/send"
+                            className="text-sm font-semibold px-6 py-3 transition-colors duration-150 inline-block"
                             style={{
                                 backgroundColor: "#F46F73",
                                 color: "#1C1917",
                                 borderRadius: "4px",
                             }}
                             onMouseEnter={(e) => {
-                                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#E35C63";
+                                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#E35C63";
                             }}
                             onMouseLeave={(e) => {
-                                (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#F46F73";
+                                (e.currentTarget as HTMLAnchorElement).style.backgroundColor = "#F46F73";
                             }}
                         >
                             Create a bill
-                        </button>
+                        </Link>
 
                         <button
                             className="text-sm font-medium px-6 py-3 transition-colors duration-150"

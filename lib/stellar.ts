@@ -1,4 +1,13 @@
-import { Horizon } from "@stellar/stellar-sdk";
+import {
+  Horizon,
+  TransactionBuilder,
+  Networks,
+  BASE_FEE,
+  Operation,
+  Asset,
+  Memo,
+} from "@stellar/stellar-sdk";
+import { signTransaction } from "@stellar/freighter-api";
 import { HORIZON_URL } from "./constants";
 
 const server = new Horizon.Server(HORIZON_URL);
@@ -28,4 +37,59 @@ export function formatXLM(raw: string): string {
     minimumFractionDigits: 2,
     maximumFractionDigits: 7,
   });
+}
+
+export interface SendResult {
+  success: boolean;
+  txHash: string | null;
+  error: string | null;
+}
+
+export async function sendXLM(
+  senderPublicKey: string,
+  destinationAddress: string,
+  amount: string,
+  memo?: string
+): Promise<SendResult> {
+  // Load sender account for sequence number
+  const senderAccount = await server.loadAccount(senderPublicKey);
+
+  // Build transaction
+  const transaction = new TransactionBuilder(senderAccount, {
+    fee: BASE_FEE,
+    networkPassphrase: Networks.TESTNET,
+  })
+    .addOperation(
+      Operation.payment({
+        destination: destinationAddress,
+        asset: Asset.native(),
+        amount: amount,
+      })
+    )
+    .addMemo(memo ? Memo.text(memo) : Memo.none())
+    .setTimeout(30)
+    .build();
+
+  // Sign with Freighter
+  const xdrString = transaction.toXDR();
+  const signResult = await signTransaction(xdrString, {
+    networkPassphrase: Networks.TESTNET,
+  });
+
+  if (signResult.error) {
+    throw new Error(String(signResult.error));
+  }
+
+  // Reconstruct and submit the signed transaction
+  const signedTx = TransactionBuilder.fromXDR(
+    signResult.signedTxXdr,
+    Networks.TESTNET
+  );
+  const response = await server.submitTransaction(signedTx);
+
+  return {
+    success: true,
+    txHash: response.hash,
+    error: null,
+  };
 }

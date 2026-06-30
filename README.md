@@ -20,16 +20,13 @@ StellarSplit is a non-custodial decentralized application (dApp) built on **Stel
 ## 📸 Showcase
 
 ### 1. Mobile Responsive UI
-> **Note for submission:** Add your mobile UI screenshot in the `screenshots` folder as `mobile-ui.png`.
-![Mobile Responsive UI](./screenshots/mobile-ui.png)
+![Mobile Responsive UI](./public/mobile.png)
 
 ### 2. CI/CD Pipeline Running
-> **Note for submission:** Add your GitHub Actions passing screenshot in the `screenshots` folder as `ci-cd.png`.
-![CI/CD Pipeline Running](./screenshots/ci-cd.png)
+![CI/CD Pipeline Running](./public/cicd.png)
 
 ### 3. Test Output (3+ Passing Tests)
-> **Note for submission:** Add your terminal screenshot of the passing tests in the `screenshots` folder as `tests.png`.
-![Test Output](./screenshots/tests.png)
+![Test Output](./public/test.png)
 
 ## 🔗 Stellar Testnet Contracts
 

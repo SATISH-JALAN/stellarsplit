@@ -7,10 +7,71 @@ import { useSendXLM } from "@/hooks/useSendXLM";
 
 const EXPLORER_BASE = "https://stellar.expert/explorer/testnet/tx/";
 
+/** Icon and hint text for each error type */
+function ErrorBanner({
+    error,
+    errorType,
+}: {
+    error: string;
+    errorType: string | null;
+}) {
+    // Each error type gets a distinct prefix so the user knows what happened
+    const prefix: Record<string, string> = {
+        WALLET_NOT_FOUND: "NOT INSTALLED —",
+        USER_REJECTED: "REJECTED —",
+        INSUFFICIENT_BALANCE: "INSUFFICIENT BALANCE —",
+        INVALID_ADDRESS: "INVALID ADDRESS —",
+        INVALID_AMOUNT: "INVALID AMOUNT —",
+        UNKNOWN: "ERROR —",
+    };
+
+    const label = errorType ? (prefix[errorType] ?? "ERROR —") : "ERROR —";
+
+    // Wallet not found gets a link to install
+    const installHint =
+        errorType === "WALLET_NOT_FOUND" ? (
+            <span>
+                {" "}
+                <a
+                    href="https://freighter.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ color: "#F46F73", textDecoration: "underline" }}
+                >
+                    Get Freighter ↗
+                </a>
+            </span>
+        ) : null;
+
+    return (
+        <div
+            style={{
+                padding: "10px 12px",
+                backgroundColor: "#2A1A1A",
+                border: "1px solid #B5524E",
+                borderRadius: "4px",
+            }}
+        >
+            <p
+                style={{
+                    fontFamily: "var(--font-mono)",
+                    fontSize: "0.72rem",
+                    color: "#B5524E",
+                    lineHeight: 1.5,
+                    letterSpacing: "0.02em",
+                }}
+            >
+                <span style={{ opacity: 0.7 }}>{label}</span> {error}
+                {installHint}
+            </p>
+        </div>
+    );
+}
+
 export function SendForm() {
     const { publicKey, isConnected, connect, isConnecting } = useWallet();
     const { formattedXLM, refetch } = useBalance(publicKey);
-    const { status, txHash, error, send, reset } = useSendXLM();
+    const { status, txHash, error, errorType, send, reset } = useSendXLM();
 
     const [destination, setDestination] = useState("");
     const [amount, setAmount] = useState("");
@@ -22,10 +83,8 @@ export function SendForm() {
         e.preventDefault();
         if (!publicKey) return;
         await send(publicKey, destination, amount, memo || undefined);
-        if (status !== "error") {
-            // Refresh balance after send
-            setTimeout(() => refetch(), 2000);
-        }
+        // Refresh balance 2s after successful send
+        setTimeout(() => refetch(), 2000);
     }
 
     function handleReset() {
@@ -35,7 +94,6 @@ export function SendForm() {
         setMemo("");
     }
 
-    // Label style
     const labelStyle: React.CSSProperties = {
         fontFamily: "var(--font-mono)",
         fontSize: "0.7rem",
@@ -45,7 +103,6 @@ export function SendForm() {
         marginBottom: "6px",
     };
 
-    // Input style
     const inputStyle: React.CSSProperties = {
         width: "100%",
         backgroundColor: "#1C1917",
@@ -72,32 +129,65 @@ export function SendForm() {
             }}
         >
             {/* Panel header */}
-            <div style={{ marginBottom: "1.25rem", borderBottom: "1px solid #38322D", paddingBottom: "1rem" }}>
-                <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.7rem", color: "#5C5450", letterSpacing: "0.1em" }}>
+            <div
+                style={{
+                    marginBottom: "1.25rem",
+                    borderBottom: "1px solid #38322D",
+                    paddingBottom: "1rem",
+                }}
+            >
+                <p
+                    style={{
+                        fontFamily: "var(--font-mono)",
+                        fontSize: "0.7rem",
+                        color: "#5C5450",
+                        letterSpacing: "0.1em",
+                    }}
+                >
                     SEND XLM
                 </p>
                 {formattedXLM && (
-                    <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "#8C837C", marginTop: "4px" }}>
-                        Available: <span style={{ color: "#F5F0EB" }}>{formattedXLM} XLM</span>
+                    <p
+                        style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "0.75rem",
+                            color: "#8C837C",
+                            marginTop: "4px",
+                        }}
+                    >
+                        Available:{" "}
+                        <span style={{ color: "#F5F0EB" }}>{formattedXLM} XLM</span>
                     </p>
                 )}
             </div>
 
-            {/* Success state */}
+            {/* ── Success state ── */}
             {status === "success" && txHash && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-                    <div style={{ borderBottom: "1px solid #38322D", paddingBottom: "1rem" }}>
-                        <p style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "0.7rem",
-                            color: "#607C5C",
-                            letterSpacing: "0.1em",
-                            marginBottom: "6px",
-                        }}>
+                    <div
+                        style={{ borderBottom: "1px solid #38322D", paddingBottom: "1rem" }}
+                    >
+                        <p
+                            style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "0.7rem",
+                                color: "#607C5C",
+                                letterSpacing: "0.1em",
+                                marginBottom: "6px",
+                            }}
+                        >
                             ✓ TRANSACTION CONFIRMED
                         </p>
-                        <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.75rem", color: "#8C837C", marginBottom: "4px" }}>
-                            Hash
+                        <p
+                            style={{
+                                fontFamily: "var(--font-mono)",
+                                fontSize: "0.7rem",
+                                color: "#5C5450",
+                                marginBottom: "4px",
+                                letterSpacing: "0.06em",
+                            }}
+                        >
+                            TX HASH
                         </p>
                         <a
                             href={`${EXPLORER_BASE}${txHash}`}
@@ -108,7 +198,7 @@ export function SendForm() {
                                 fontSize: "0.78rem",
                                 color: "#F46F73",
                                 wordBreak: "break-all",
-                                lineHeight: 1.4,
+                                lineHeight: 1.5,
                             }}
                         >
                             {txHash}
@@ -133,10 +223,16 @@ export function SendForm() {
                 </div>
             )}
 
-            {/* Not connected */}
+            {/* ── Not connected ── */}
             {!isConnected && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-                    <p style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem", color: "#8C837C" }}>
+                    <p
+                        style={{
+                            fontFamily: "var(--font-mono)",
+                            fontSize: "0.8rem",
+                            color: "#8C837C",
+                        }}
+                    >
                         Connect your wallet to send XLM.
                     </p>
                     <button
@@ -160,10 +256,12 @@ export function SendForm() {
                 </div>
             )}
 
-            {/* Send form */}
+            {/* ── Send form ── */}
             {isConnected && status !== "success" && (
-                <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "1rem" }}>
-
+                <form
+                    onSubmit={handleSubmit}
+                    style={{ display: "flex", flexDirection: "column", gap: "1rem" }}
+                >
                     {/* Destination */}
                     <div>
                         <label style={labelStyle}>DESTINATION ADDRESS</label>
@@ -174,12 +272,14 @@ export function SendForm() {
                             placeholder="G…"
                             required
                             disabled={isSending}
-                            style={{
-                                ...inputStyle,
-                                opacity: isSending ? 0.6 : 1,
+                            style={{ ...inputStyle, opacity: isSending ? 0.6 : 1 }}
+                            onFocus={(e) => {
+                                e.target.style.borderColor = "#473F39";
                             }}
-                            onFocus={(e) => { e.target.style.borderColor = "#473F39"; }}
-                            onBlur={(e) => { e.target.style.borderColor = "#38322D"; }}
+                            onBlur={(e) => {
+                                e.target.style.borderColor =
+                                    errorType === "INVALID_ADDRESS" ? "#B5524E" : "#38322D";
+                            }}
                         />
                     </div>
 
@@ -195,16 +295,21 @@ export function SendForm() {
                             step="any"
                             required
                             disabled={isSending}
-                            style={{
-                                ...inputStyle,
-                                opacity: isSending ? 0.6 : 1,
+                            style={{ ...inputStyle, opacity: isSending ? 0.6 : 1 }}
+                            onFocus={(e) => {
+                                e.target.style.borderColor = "#473F39";
                             }}
-                            onFocus={(e) => { e.target.style.borderColor = "#473F39"; }}
-                            onBlur={(e) => { e.target.style.borderColor = "#38322D"; }}
+                            onBlur={(e) => {
+                                e.target.style.borderColor =
+                                    errorType === "INSUFFICIENT_BALANCE" ||
+                                        errorType === "INVALID_AMOUNT"
+                                        ? "#B5524E"
+                                        : "#38322D";
+                            }}
                         />
                     </div>
 
-                    {/* Memo (optional) */}
+                    {/* Memo */}
                     <div>
                         <label style={labelStyle}>
                             MEMO{" "}
@@ -214,28 +319,22 @@ export function SendForm() {
                             type="text"
                             value={memo}
                             onChange={(e) => setMemo(e.target.value)}
-                            placeholder="what&apos;s this for?"
+                            placeholder="what's this for?"
                             maxLength={28}
                             disabled={isSending}
-                            style={{
-                                ...inputStyle,
-                                opacity: isSending ? 0.6 : 1,
+                            style={{ ...inputStyle, opacity: isSending ? 0.6 : 1 }}
+                            onFocus={(e) => {
+                                e.target.style.borderColor = "#473F39";
                             }}
-                            onFocus={(e) => { e.target.style.borderColor = "#473F39"; }}
-                            onBlur={(e) => { e.target.style.borderColor = "#38322D"; }}
+                            onBlur={(e) => {
+                                e.target.style.borderColor = "#38322D";
+                            }}
                         />
                     </div>
 
-                    {/* Error message */}
+                    {/* ── Typed error banner ── */}
                     {status === "error" && error && (
-                        <p style={{
-                            fontFamily: "var(--font-mono)",
-                            fontSize: "0.75rem",
-                            color: "#B5524E",
-                            lineHeight: 1.4,
-                        }}>
-                            {error}
-                        </p>
+                        <ErrorBanner error={error} errorType={errorType} />
                     )}
 
                     {/* Submit */}

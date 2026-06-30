@@ -16,6 +16,7 @@ import {
     truncateAddress,
     initKit,
 } from "@/lib/wallet";
+import { classifyError, getErrorMessage, WalletNotFoundError } from "@/lib/errors";
 import { WalletModal } from "@/components/WalletModal";
 
 interface WalletState {
@@ -58,24 +59,12 @@ export function WalletProvider({ children }: { children: ReactNode }) {
         setIsConnecting(true);
         setError(null);
         try {
-            await selectWallet(walletId);
+            selectWallet(walletId);
             const address = await getPublicKeyFromKit();
             setPublicKey(address);
         } catch (err) {
-            const msg = err instanceof Error ? err.message : "Connection failed";
-            if (
-                msg.toLowerCase().includes("not found") ||
-                msg.toLowerCase().includes("not installed")
-            ) {
-                setError("Wallet not installed. Install it and try again.");
-            } else if (
-                msg.toLowerCase().includes("declined") ||
-                msg.toLowerCase().includes("rejected")
-            ) {
-                setError("Connection rejected by wallet.");
-            } else {
-                setError(msg);
-            }
+            const classified = classifyError(err);
+            setError(getErrorMessage(classified));
         } finally {
             setIsConnecting(false);
         }

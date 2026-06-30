@@ -1,6 +1,10 @@
 "use client";
 
+import { useWallet } from "@/context/WalletContext";
+import { WalletPanel } from "@/components/WalletPanel";
+
 export function HeroSection() {
+    const { isConnected } = useWallet();
     return (
         <section
             className="relative min-h-screen max-w-7xl mx-auto px-6 flex flex-col justify-end pb-16 md:pb-20"
@@ -47,7 +51,7 @@ export function HeroSection() {
 
                     {/* H1 — ragged right, not centered */}
                     <h1
-                        className="font-bold leading-[1.0] tracking-tight"
+                        className="font-bold leading-none tracking-tight"
                         style={{
                             fontFamily: "var(--font-display)",
                             fontSize: "clamp(3rem, 8.5vw, 6rem)",
@@ -112,44 +116,48 @@ export function HeroSection() {
                     </div>
                 </div>
 
-                {/* Right: stats column — vertical list, not cards */}
-                <div
-                    className="flex flex-row md:flex-col gap-8 md:gap-0 md:divide-y pb-1"
-                    style={{ borderColor: "#38322D" }}
-                >
-                    {[
-                        { value: "3s", label: "Settlement time" },
-                        { value: "~$0", label: "Transaction fees" },
-                        { value: "Non-custodial", label: "No third party holds funds" },
-                    ].map((s, i) => (
-                        <div
-                            key={s.label}
-                            className="flex flex-col gap-0.5 md:py-5"
-                            style={i === 0 ? { paddingTop: 0 } : {}}
-                        >
-                            <span
-                                className="font-bold tracking-tight"
-                                style={{
-                                    fontFamily: "var(--font-display)",
-                                    fontSize: "1.25rem",
-                                    color: "#F5F0EB",
-                                }}
+                {/* Right: wallet panel when connected, static stats otherwise */}
+                {isConnected ? (
+                    <WalletPanel />
+                ) : (
+                    <div
+                        className="flex flex-row md:flex-col gap-8 md:gap-0 md:divide-y pb-1"
+                        style={{ borderColor: "#38322D" }}
+                    >
+                        {[
+                            { value: "3s", label: "Settlement time" },
+                            { value: "~$0", label: "Transaction fees" },
+                            { value: "Non-custodial", label: "No third party holds funds" },
+                        ].map((s, i) => (
+                            <div
+                                key={s.label}
+                                className="flex flex-col gap-0.5 md:py-5"
+                                style={i === 0 ? { paddingTop: 0 } : {}}
                             >
-                                {s.value}
-                            </span>
-                            <span
-                                className="text-xs"
-                                style={{
-                                    fontFamily: "var(--font-mono)",
-                                    color: "#5C5450",
-                                    letterSpacing: "0.06em",
-                                }}
-                            >
-                                {s.label}
-                            </span>
-                        </div>
-                    ))}
-                </div>
+                                <span
+                                    className="font-bold tracking-tight"
+                                    style={{
+                                        fontFamily: "var(--font-display)",
+                                        fontSize: "1.25rem",
+                                        color: "#F5F0EB",
+                                    }}
+                                >
+                                    {s.value}
+                                </span>
+                                <span
+                                    className="text-xs"
+                                    style={{
+                                        fontFamily: "var(--font-mono)",
+                                        color: "#5C5450",
+                                        letterSpacing: "0.06em",
+                                    }}
+                                >
+                                    {s.label}
+                                </span>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
     );

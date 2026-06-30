@@ -7,6 +7,7 @@ StellarSplit is a non-custodial decentralized application (dApp) built on **Stel
 ## 🚀 Live Demo & Links
 
 - **Live Demo**: [https://stellarsplit-lake.vercel.app/](https://stellarsplit-lake.vercel.app/)
+- **Demo Video**: [https://www.loom.com/share/65054e47db8b40a68426237f2081b57a](https://www.loom.com/share/65054e47db8b40a68426237f2081b57a)
 - **Public GitHub Repository**: [https://github.com/SATISH-JALAN/stellarsplit](https://github.com/SATISH-JALAN/stellarsplit)
 
 ## 🛠 Features
